@@ -1,16 +1,19 @@
 {
     "technologies": {
         "apis": [
-            "insert apis"
+            "WebAudio API"
         ],
         "platforms": [
-            "insert platforms"
+            "Chrome Apps"
         ],
         "toolkits": [
-            "insert toolkits"
+            "Processing.js"
         ]
     },
     "themes": [
-        "insert themes"
+        "Music",
+        "Instrument",
+        "Graphics",
+        "Projections"
     ]
 }

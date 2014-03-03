@@ -2,8 +2,8 @@
 Play differently ...
 
 ## Authors
-- Tyson Kemp
-- Trevor Kemp
+- Tyson Kemp github.com/processnotproduct
+- Trevor Kemp 
 
 ## Description
 We want to create an instrument that feels different and is closely linked to the visualization that would be created from that music. By using the air pressure of a rubber ball to actuate and effect the sound the player would feel a different type of connection to their musical expression.

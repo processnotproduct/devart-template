@@ -2,7 +2,7 @@
 Play differently ...
 
 ## Authors
-- Tyson Kemp github.com/processnotproduct
+- Tyson Kemp https://github.com/processnotproduct
 - Trevor Kemp 
 
 ## Description

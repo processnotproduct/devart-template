@@ -15,13 +15,16 @@ Coming soon ...
 [Example Link](http://www.google.com "Example Link")-->
 
 ## Example Code
-Coming soon ...
-<!--NOTE: Wrap your code blocks or any code citation by using ``` like the example below.
+Imma firin' muh snares!
 ```
-function test() {
-  console.log("Printing a test");
-}
-```-->
+if (analogvalue<threshlo &&  tripval2==1) {
+    snare.trigger();
+  
+      for (int i =0; i<=50; i++){
+       arduino.analogWrite(9,255);
+      }
+  }
+```
 ## Links to External Libraries
 Coming soon ...
 <!-- NOTE: You can also use this space to link to external libraries or Github repositories you used on your project.
@@ -29,7 +32,7 @@ Coming soon ...
 [Example Link](http://www.google.com "Example Link")
 -->
 ## Images & Videos
-Coming soon ...
+<iframe width="420" height="315" src="//www.youtube.com/embed/jp-_0__8DfM?rel=0" frameborder="0" allowfullscreen></iframe>
 <!--NOTE: For additional images you can either use a relative link to an image on this repo or an absolute link to an externally hosted image.
 
 ![Example Image](project_images/cover.jpg?raw=true "Example Image")

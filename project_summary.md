@@ -32,7 +32,7 @@ Coming soon ...
 [Example Link](http://www.google.com "Example Link")
 -->
 ## Images & Videos
-<iframe width="420" height="315" src="//www.youtube.com/embed/jp-_0__8DfM?rel=0" frameborder="0" allowfullscreen></iframe>
+http://youtu.be/jp-_0__8DfM
 <!--NOTE: For additional images you can either use a relative link to an image on this repo or an absolute link to an externally hosted image.
 
 ![Example Image](project_images/cover.jpg?raw=true "Example Image")

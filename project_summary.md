@@ -33,7 +33,6 @@ Coming soon ...
 -->
 ## Images & Videos
 Coming soon ...
-http://youtu.be/jp-_0__8DfM
 <!--NOTE: For additional images you can either use a relative link to an image on this repo or an absolute link to an externally hosted image.
 
 ![Example Image](project_images/cover.jpg?raw=true "Example Image")

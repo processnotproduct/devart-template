@@ -81,18 +81,18 @@ class SineInstrument implements Instrument
 
   //=====================
 
-color off = color(4, 79, 111);
-color on = color(84, 145, 158);
-color bgg= color(4, 79, 111);
-float analogvalue = 0;
-float freq=100;
-float durr=0.1;
-float threshhi=80;
-float threshlo=40;
-int tripval=0;
-int tripval2=0;
-float counter2=0;
-int outputvoltage=1;
+  color off = color(4, 79, 111);
+  color on = color(84, 145, 158);
+  color bgg = color(4, 79, 111);
+  float analogvalue = 0;
+  float freq = 100;
+  float durr = 0.1;
+  float threshhi = 263;
+  float threshlo = 260;
+  int tripval = 0;
+  int tripval2 = 0;
+  float counter2 = 0;
+  int outputvoltage = 1;
 
 void setup() {
   size(470, 280);
@@ -114,23 +114,22 @@ void setup() {
     arduino.pinMode(i, Arduino.INPUT);
     
     //for audio:
-    
       minim = new Minim(this);
   
-  // use the getLineOut method of the Minim object to get an AudioOutput object
-  out = minim.getLineOut();
+    // use the getLineOut method of the Minim object to get an AudioOutput object
+      out = minim.getLineOut();
     
-      // load BD.wav from the data folder
-  kick = minim.loadSample( "BD.mp3", // filename
-                            512      // buffer size
-                         );
+    // load BD.wav from the data folder
+      kick = minim.loadSample(
+        "Oldskool Drum And Bass Loop 5.mp3", // filename 
+        512  // buffer size
+      );
     
-      // load SD.wav from the data folder
-  snare = minim.loadSample("SD.wav", 512);
-  if ( snare == null ) println("Didn't get snare!");
-
-
+    // load SD.wav from the data folder
+      snare = minim.loadSample("SD.wav", 512);
+      if ( snare == null ) println("Didn't get snare!");
 }
+
 
 void draw() {
   background(bgg);
@@ -138,57 +137,47 @@ void draw() {
   
   analogvalue=arduino.analogRead(0);//channel is 0
   
-
-
-
-  if (analogvalue-66 < 1) {
+  
+  if (analogvalue-260 < 1) {
     outputvoltage=1;
   } else {
-    outputvoltage=int(analogvalue-66);
+    outputvoltage=int(analogvalue-260);
   }
   
   arduino.analogWrite(9,outputvoltage);
 
 
-
-
-
-      fill(off);
-      rect(400, 30, 20, analogvalue, 5);
-  line(400,30+threshhi,450,30+threshhi);
-  line(400,30+threshlo,450,30+threshlo);
+  // Draw a rect whose length corresponds to the value of an analog input.
+  fill(off);
+  rect(400, 30, 20, analogvalue / 4, 5);
+  line(400,30+threshhi / 4,450,30+threshhi / 4);
+  line(400,30+threshlo / 4,450,30+threshlo / 4);
 
   // Draw a circle whose size corresponds to the value of an analog input.
   noFill();
   for (int i = 0; i <= 5; i++) {
-    ellipse(100 + i * 60, 240, analogvalue / 4, analogvalue / 4);
+    ellipse(100 + i * 60, 240, analogvalue / 6, analogvalue / 6);
   }
-  
   
   bgg= color(analogvalue*2-20, 79, 111);
   freq=analogvalue*2+50;
   durr=10/freq;
   
   text(analogvalue,100,100);
-text(millis(),200,100);
+  text(millis(),200,100);
   
   //out.playNote(0,0.1,freq);
-
-
-  if (analogvalue>threshhi  && tripval==1) {
-    
-    kick.trigger();
-
   
-     
+  if (analogvalue>threshhi && tripval==1) {
+    kick.trigger();
   }
   
-    if (analogvalue<threshlo &&  tripval2==1) {
+  if (analogvalue<threshlo && tripval2==1) {
     snare.trigger();
   
-      for (int i =0; i<=50; i++){
-       arduino.analogWrite(9,255);
-      }
+    for (int i =0; i<=50; i++){
+    arduino.analogWrite(9,255);
+    }
   }
   
   if (analogvalue<threshhi) {
@@ -206,7 +195,6 @@ text(millis(),200,100);
   //waveforms
    for(int i = 0; i < out.bufferSize() - 1; i++)
   {
-
     line( i, 150 + out.right.get(i)*50, i+1, 150 + out.right.get(i+1)*50 );
   }
   

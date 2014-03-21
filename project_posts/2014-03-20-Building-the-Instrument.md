@@ -1,0 +1,5 @@
+We have been hard at work with the code and hardware, but I wanted to update you on the physical instrument itself.
+
+Our project started because we wanted to create a different way to interact with sounds and light. Keyboards and drum machines are usually sterile and hard.
+
+<table style="width:194px;"><tr><td align="center" style="height:194px;background:url(https://www.gstatic.com/pwa/s/v/lighthousefe_198.01/transparent_album_background.gif) no-repeat left"><a href="https://picasaweb.google.com/113409367864923945253/DevArtSlideshow?authuser=0&feat=embedwebsite"><img src="https://lh6.googleusercontent.com/-Hn2NUZ_BveE/UyuRubcOwVE/AAAAAAAAjt0/qGViMsKm_SQ/s160-c/DevArtSlideshow.jpg" width="160" height="160" style="margin:1px 0 0 4px;"></a></td></tr><tr><td style="text-align:center;font-family:arial,sans-serif;font-size:11px"><a href="https://picasaweb.google.com/113409367864923945253/DevArtSlideshow?authuser=0&feat=embedwebsite" style="color:#4D4D4D;font-weight:bold;text-decoration:none;">DevArt Slideshow</a></td></tr></table>

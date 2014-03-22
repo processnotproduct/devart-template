@@ -1,6 +1,6 @@
 // LiveOSC_Processing.pde
 // 2012
- 
+
 import oscP5.*;
 import netP5.*;
 import controlP5.*;
@@ -16,7 +16,7 @@ int rows;
 int NUM_TRACKS = 8;    // Current max TOTAL clips: 89
 int NUM_CLIPS = 6;     // Adjust IDs in SetupDraw for more total clips
 String name;
- 
+  
 // Spacing between controls and size
 int spacingX = 62;
 int spacingY = 52;

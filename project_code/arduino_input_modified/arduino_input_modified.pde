@@ -46,38 +46,38 @@ AudioSample snare;
 
 // to make an Instrument we must define a class
 // that implements the Instrument interface.
-class SineInstrument implements Instrument
-{
-  Oscil wave;
-  Line  ampEnv;
-  
-  SineInstrument( float frequency )
-  {
-    // make a sine wave oscillator
-    // the amplitude is zero because 
-    // we are going to patch a Line to it anyway
-    wave   = new Oscil( frequency, 0, Waves.SINE );
-    ampEnv = new Line();
-    ampEnv.patch( wave.amplitude );
-  }
+//class SineInstrument implements Instrument
+//{
+//  Oscil wave;
+//  Line  ampEnv;
+//  
+//  SineInstrument( float frequency )
+//  {
+//    // make a sine wave oscillator
+//    // the amplitude is zero because 
+//    // we are going to patch a Line to it anyway
+//    wave   = new Oscil( frequency, 0, Waves.SINE );
+//    ampEnv = new Line();
+//    ampEnv.patch( wave.amplitude );
+//  }
   
   // this is called by the sequencer when this instrument
   // should start making sound. the duration is expressed in seconds.
-  void noteOn( float duration )
-  {
-    // start the amplitude envelope
-    ampEnv.activate( duration, 0.5f, 0 );
-    // attach the oscil to the output so it makes sound
-    wave.patch( out );
-  }
-  
-  // this is called by the sequencer when the instrument should
-  // stop making sound
-  void noteOff()
-  {
-    wave.unpatch( out );
-  }
-}
+//  void noteOn( float duration )
+//  {
+//    // start the amplitude envelope
+//    ampEnv.activate( duration, 0.5f, 0 );
+//    // attach the oscil to the output so it makes sound
+//    wave.patch( out );
+//  }
+//  
+//  // this is called by the sequencer when the instrument should
+//  // stop making sound
+//  void noteOff()
+//  {
+//    wave.unpatch( out );
+//  }
+//}
 
   //=====================
 
@@ -87,8 +87,8 @@ class SineInstrument implements Instrument
   float analogvalue = 0;
   float freq = 100;
   float durr = 0.1;
-  float threshhi = 263;
-  float threshlo = 260;
+  float threshhi = 70;
+  float threshlo = 65;
   int tripval = 0;
   int tripval2 = 0;
   float counter2 = 0;
@@ -107,7 +107,7 @@ void setup() {
   
   // Alternatively, use the name of the serial port corresponding to your
   // Arduino (in double-quotes), as in the following line.
-  //arduino = new Arduino(this, "/dev/tty.usbmodem621", 57600);
+  //arduino = new Arduino(this, "/dev/tty.usbmodem1d11", 57600);
   
   // Set the Arduino digital pins as inputs.
   for (int i = 0; i <= 13; i++)
@@ -138,10 +138,10 @@ void draw() {
   analogvalue=arduino.analogRead(0);//channel is 0
   
   
-  if (analogvalue-260 < 1) {
+  if (analogvalue-70 < 1) {
     outputvoltage=1;
   } else {
-    outputvoltage=int(analogvalue-260);
+    outputvoltage=int(analogvalue-70);
   }
   
   arduino.analogWrite(9,outputvoltage);
@@ -181,22 +181,22 @@ void draw() {
   }
   
   if (analogvalue<threshhi) {
-    tripval=1 ;
+    tripval=1;
   } else {
     tripval=0;
   }
   
     if (analogvalue>threshlo) {
-    tripval2=1 ;
+    tripval2=1;
   } else {
     tripval2=0;
   }
   
-  //waveforms
-   for(int i = 0; i < out.bufferSize() - 1; i++)
-  {
-    line( i, 150 + out.right.get(i)*50, i+1, 150 + out.right.get(i+1)*50 );
-  }
+//  //waveforms
+//   for(int i = 0; i < out.bufferSize() - 1; i++)
+//  {
+//    line( i, 150 + out.right.get(i)*50, i+1, 150 + out.right.get(i+1)*50 );
+//  }
   
 
 }

@@ -75,7 +75,7 @@ void setup()
   // Setup ControlP5
   controlP5 = new ControlP5(this);
   
-    // Call setup functions
+  // Call setup functions
   setupClips(NUM_TRACKS, NUM_CLIPS);
 //  setupScenes(NUM_CLIPS);
 //  setupFaders(NUM_TRACKS);
@@ -85,6 +85,7 @@ void setup()
    
   // OSC querying
 }
+
 
 void draw()
 {
@@ -142,7 +143,7 @@ void oscEvent(OscMessage theOscMessage)
      
     else if(track <= NUM_TRACKS && clip <= NUM_CLIPS && clipStatus == 0)
     {
-      // myClips[track][clip].getColor().setForeground(0xff000000);
+      //myClips[track][clip].getColor().setForeground(0xff000000);
     }
   }
  
@@ -153,7 +154,7 @@ void oscEvent(OscMessage theOscMessage)
  
     if (track < NUM_TRACKS)
     {
-      myFaders[track].setLabel("" + name);
+//      myFaders[track].setLabel("" + name);
  
      //  println("Track: " + track + "  Name: " + name);
     }
@@ -187,28 +188,28 @@ void oscEvent(OscMessage theOscMessage)
 // ID ranges
 int MIN_ID_CLIPS = 0;        // Clips 0-89  
 int MAX_ID_CLIPS = 89;       //
-int MIN_ID_SCENES = 90;      // Scenes 90-99
-int MAX_ID_SCENES = 99;      //
-int MIN_ID_STOPS = 100;      // Stops 100-108
-int MAX_ID_STOPS = 108;      //
-int ID_STOP_ALL = 109;       // Stop All 109
-int MIN_ID_FADERS = 110;     // Faders 110-118
-int MAX_ID_FADERS = 118;     //
-int ID_MASTER_FADER = 119;   // Master Fader 119
-int MIN_ID_MUTES = 120;      // Mutes 120-129
-int MAX_ID_MUTES = 129;
-int ID_PLAY = 200;           // Play 200
-int ID_STOP = 201;           // Stop 201
+//int MIN_ID_SCENES = 90;      // Scenes 90-99
+//int MAX_ID_SCENES = 99;      //
+//int MIN_ID_STOPS = 100;      // Stops 100-108
+//int MAX_ID_STOPS = 108;      //
+//int ID_STOP_ALL = 109;       // Stop All 109
+//int MIN_ID_FADERS = 110;     // Faders 110-118
+//int MAX_ID_FADERS = 118;     //
+//int ID_MASTER_FADER = 119;   // Master Fader 119
+//int MIN_ID_MUTES = 120;      // Mutes 120-129
+//int MAX_ID_MUTES = 129;
+//int ID_PLAY = 200;           // Play 200
+//int ID_STOP = 201;           // Stop 201
  
 Bang[][] myClips;
-Bang[] myStops;
-Bang[] myScenes;
-Slider[] myFaders;
-Slider masterFader;
-Toggle[] myMutes;
-Bang play;
-Bang stop;
-Bang stopAll;
+//Bang[] myStops;
+//Bang[] myScenes;
+//Slider[] myFaders;
+//Slider masterFader;
+//Toggle[] myMutes;
+//Bang play;
+//Bang stop;
+//Bang stopAll;
  
 // Setup and draw clips
 void setupClips(int numCols, int numRows)

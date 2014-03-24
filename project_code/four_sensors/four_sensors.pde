@@ -30,58 +30,67 @@ To use:
 For more information, see: http://playground.arduino.cc/Interfacing/Processing
 */
 
+// Imports
+import oscP5.*;
+import netP5.*;
+import controlP5.*;
+
 import processing.serial.*;
 
 import cc.arduino.*;
-
-Arduino arduino1;
-Arduino arduino2;
 
 //for audio=====================
 
 import ddf.minim.*;
 import ddf.minim.ugens.*;
 
+// Declarations
+OscP5 oscP5;
+ControlP5 controlP5;
+NetAddress myRemoteLocation;
+
+Arduino arduino1;
+Arduino arduino2;
+
 Minim minim;
 AudioOutput out;
 AudioSample kick;
 AudioSample snare;
 
-
-// to make an Instrument we must define a class
-// that implements the Instrument interface.
-class SineInstrument implements Instrument
-{
-  Oscil wave;
-  Line  ampEnv;
-  
-  SineInstrument( float frequency )
-  {
-    // make a sine wave oscillator
-    // the amplitude is zero because 
-    // we are going to patch a Line to it anyway
-    wave   = new Oscil( frequency, 0, Waves.SINE );
-    ampEnv = new Line();
-    ampEnv.patch( wave.amplitude );
-  }
-  
-  // this is called by the sequencer when this instrument
-  // should start making sound. the duration is expressed in seconds.
-  void noteOn( float duration )
-  {
-    // start the amplitude envelope
-    ampEnv.activate( duration, 0.5f, 0 );
-    // attach the oscil to the output so it makes sound
-    wave.patch( out );
-  }
-  
-  // this is called by the sequencer when the instrument should
-  // stop making sound
-  void noteOff()
-  {
-    wave.unpatch( out );
-  }
-}
+//// to make an Instrument we must define a class
+//// that implements the Instrument interface.
+//class SineInstrument implements Instrument
+//{
+//  Oscil wave;
+//  Line  ampEnv;
+//  
+//  SineInstrument( float frequency )
+//  {
+//    // make a sine wave oscillator
+//    // the amplitude is zero because 
+//    // we are going to patch a Line to it anyway
+//    wave   = new Oscil( frequency, 0, Waves.SINE );
+//    ampEnv = new Line();
+//    ampEnv.patch( wave.amplitude );
+//  }
+//  
+//  // this is called by the sequencer when this instrument
+//  // should start making sound. the duration is expressed in seconds.
+//  void noteOn( float duration )
+//  {
+//    // start the amplitude envelope
+//    ampEnv.activate( duration, 0.5f, 0 );
+//    // attach the oscil to the output so it makes sound
+//    wave.patch( out );
+//  }
+//  
+//  // this is called by the sequencer when the instrument should
+//  // stop making sound
+//  void noteOff()
+//  {
+//    wave.unpatch( out );
+//  }
+//}
 
   //=====================
 
@@ -93,22 +102,27 @@ float analogvalue0 = 0;
 float analogvalue1 = 0;
 float analogvalue2 = 0;
 float analogvalue3 = 0;
+float analogvalue4 = 0;
 
 float freq=100;
 float duration=0.1;
-float threshold0=995;
-float threshold1=998;
+float threshold0=1000;
+float threshold1=1001;
 float threshold2=1001;
 float threshold3=1001;
+float threshold4=700;
 
 int trip0=0;
 int trip1=0;
+int trip4=0;
+
 
 
 void setup() {
   
 // make frame for the program
   size(800, 500);
+  frameRate(25);
 
 //  // Prints out the available serial ports.
 //  println(Arduino.list());
@@ -135,9 +149,18 @@ void setup() {
 //   // arduino2.pinMode(i, Arduino.INPUT);
 
 
+  // Setup OSC
+  oscP5 = new OscP5(this,9001); // was 9001
+  myRemoteLocation = new NetAddress("localhost",9000);
+   
+  // Setup ControlP5
+  controlP5 = new ControlP5(this);
 
-
- //    MAKE SURE TO LOAD MODIFIED STANDARDFIRMATA, THAT HAS analogReference(INTERNAL); IN THE LOOP() SO THAT VOLTAGES WILL BE CORRECT
+  
+  
+  
+  
+// ***MAKE SURE TO LOAD MODIFIED STANDARDFIRMATA, THAT HAS analogReference(INTERNAL); IN THE LOOP() SO THAT VOLTAGES WILL BE CORRECT
  
  
  
@@ -156,6 +179,10 @@ void setup() {
 // load SD.wav from the data folder
   snare = minim.loadSample("SD.wav", 512);
 
+
+
+oscP5.plug(this,"incomingHandlerPlay","/live/play");
+
 }
 
 
@@ -169,6 +196,7 @@ void draw() {
   analogvalue1=arduino1.analogRead(1);//channel is 1
   analogvalue2=arduino1.analogRead(2);//channel is 2
   analogvalue3=arduino1.analogRead(3);//channel is 3
+    analogvalue4=arduino1.analogRead(4);//channel is 4
   
 //  analogvalue2=arduino2.analogRead(0);//channel is 0
 
@@ -178,6 +206,7 @@ void draw() {
   text(analogvalue1,200,100);
   text(analogvalue2,300,100);
   text(analogvalue3,400,100);
+    text(analogvalue4,500,100);
   //display time (milliseconds)
 text(millis(),400,200);
 
@@ -188,6 +217,7 @@ text(millis(),400,200);
   rect(200, 150, 20, 5*(analogvalue1-990), 5);
   rect(300, 150, 20, 5*(analogvalue2-990), 5);
   rect(400, 150, 20, 5*(analogvalue3-990), 5);
+  rect(500, 150, 20, 0.5*(analogvalue4-500), 5);
 //  
   //indicators of threshold value(s)
   stroke(255);
@@ -195,58 +225,68 @@ text(millis(),400,200);
 line(200,150+5*(threshold1-990),250,150+5*(threshold1-990));
 line(300,150+5*(threshold2-990),350,150+5*(threshold2-990));
 line(400,150+5*(threshold3-990),450,150+5*(threshold3-990));
+line(500,150+0.5*(threshold4-500),550,150+0.5*(threshold4-500));
   
 
 
 //sensor 0 action
-// (if value is above threshold and has not been tripped)
-  if (analogvalue0>threshold0  && trip0==0) {
-    kick.trigger();
-  } 
-  if (analogvalue0<threshold0) {
-    trip0=0;
-  }  else {
-   trip0=1; 
+  if (analogvalue0>threshold0  ) {
+    //send flipping signal via OSC
+    OscMessage myMessage = new OscMessage("/arduino1_0");
+    myMessage.add(0);
+    oscP5.send(myMessage, myRemoteLocation);
+    myMessage = new OscMessage("/arduino1_0");
+    myMessage.add(1);
+    oscP5.send(myMessage, myRemoteLocation);
+    
+  }    
+
+//sensor 4 action
+  if (analogvalue4>threshold4  ) {
+    //send flipping signal via OSC
+    OscMessage myMessage = new OscMessage("/arduino1_4");
+    myMessage.add(0);
+    oscP5.send(myMessage, myRemoteLocation);
+    myMessage = new OscMessage("/arduino1_4");
+    myMessage.add(1);
+    oscP5.send(myMessage, myRemoteLocation);
+     
+     
+      OscMessage myMessage2 = new OscMessage("/live/play");
+    oscP5.send(myMessage2, myRemoteLocation);
+    
+    
+//    int trackNum = 0;
+//    int clipNum = 0;
+//     
+//    println("Track: " + trackNum + "  Clip: " + clipNum);
+// 
+//    OscMessage myMessage = new OscMessage("/live/play/clipslot");
+//    myMessage.add(trackNum);
+//    myMessage.add(clipNum);
+//    oscP5.send(myMessage, myRemoteLocation);
+//    
+//    
+//    clipNum = 1;
+//     
+//    println("Track: " + trackNum + "  Clip: " + clipNum);
+//    
+//    myMessage = new OscMessage("/live/play/clipslot");
+//    myMessage.add(trackNum);
+//    myMessage.add(clipNum);
+//    oscP5.send(myMessage, myRemoteLocation);
+    
+    
   }
   
-//sensor 1 action
-// (if value is above threshold and has not been tripped)
-  if (analogvalue1>threshold1  && trip1==0) {
-    snare.trigger();
-    trip1=1;
-  } else {
-   trip1=0; 
-  }  
-
   
 
 
 
 
-  // Draw circles whose size corresponds to the value of an analog input.
-//  noFill();
-//  for (int i = 0; i <= 5; i++) {
-//    ellipse(100 + i * 60, 240, analogvalue / 4, analogvalue / 4);
-//  }
-//  
 
 
-//  //change background color
-//  bgg= color(analogvalue*2-20, 79, 111);
-  
-//  freq=analogvalue*2+50;
-//  duration=10/freq;
-  
-  //out.playNote(0,0.1,freq);
-  
 
-  
-//  //waveforms
-//   for(int i = 0; i < out.bufferSize() - 1; i++)
-//  {
-//
-//    line( i, 150 + out.right.get(i)*50, i+1, 150 + out.right.get(i+1)*50 );
-//  }
   
 
 }

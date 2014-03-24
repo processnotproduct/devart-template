@@ -6,9 +6,10 @@ import controlP5.*;
 
 import processing.serial.*;
 import cc.arduino.*;
-  //for audio=====================
-import ddf.minim.*;
-import ddf.minim.ugens.*;
+
+//  //for audio=====================
+//import ddf.minim.*;
+//import ddf.minim.ugens.*;
 
 // Declarations
 OscP5 oscP5;
@@ -16,10 +17,10 @@ ControlP5 controlP5;
 NetAddress myRemoteLocation;
 
 Arduino arduino;
-Minim minim;
-AudioOutput out;
-AudioSample kick;
-AudioSample snare;
+//Minim minim;
+//AudioOutput out;
+//AudioSample kick;
+//AudioSample snare;
 
 // Global variables
 int columns;
@@ -85,7 +86,6 @@ void setup()
    
   // OSC querying
 }
-
 
 void draw()
 {
@@ -251,99 +251,7 @@ void setupClips(int numCols, int numRows)
     }
   }*/
 }
- 
- 
-//// Setup and draw stops
-//void setupStops(int numCols)
-//{
-//  myStops = new Bang[numCols];
-//  for (columns = 0; columns < numCols; columns++)
-//  {
-//    myStops[columns] = controlP5.addBang("Stop" + columns, ((columns+1)*spacingX)-clipSize, ((NUM_CLIPS+1)*spacingY)-clipSize, clipSize, clipSize);
-//    myStops[columns].setLabel("Stop" + columns);
-//    myStops[columns].setId(MIN_ID_STOPS + columns);
-//    myStops[columns].align(ControlP5.CENTER,ControlP5.CENTER,ControlP5.CENTER,ControlP5.CENTER);
-//  }
-// 
-//  // Draw stop all
-//  stopAll = controlP5.addBang("StopAll", 740, ((NUM_CLIPS+1)*spacingY)-clipSize, clipSize, clipSize);
-//  stopAll.setLabel("Stop All");
-//  stopAll.setId(ID_STOP_ALL);
-//  stopAll.align(ControlP5.CENTER,ControlP5.CENTER,ControlP5.CENTER,ControlP5.CENTER);
-//}
- 
- 
-//// Setup and draw scenes
-//void setupScenes(int numRows)
-//{
-//  myScenes = new Bang[numRows];
-// 
-//  for (rows = 0; rows < numRows; rows++)
-//  {
-//    myScenes[rows] = controlP5.addBang("Scene" + rows, 740, ((rows+1)*spacingY)-clipSize, clipSize, clipSize);
-//    myScenes[rows].setLabel("Scene" + rows);
-//    myScenes[rows].setId(MIN_ID_SCENES + rows);
-//    myScenes[rows].align(ControlP5.CENTER,ControlP5.CENTER,ControlP5.CENTER,ControlP5.CENTER);
-//  }
-//}
- 
- 
-//// Setup and draw Faders
-//void setupFaders(int numFaders)
-//{
-//  myFaders = new Slider[numFaders];
-//  for (int i = 0; i < numFaders; i++)
-//  {
-//    myFaders[i] = controlP5.addSlider("Fader" + i, 0, 1, 100, spacingX*(1+i)-clipSize, 400, clipSize, 150);
-//    //myFaders[i].setLabel("Fader " + i);
-//    myFaders[i].setValue(0.84);
-//    myFaders[i].setId(110+i);
-//    // myFaders[i].align(0,0,0,ControlP5.CENTER);
-//  }
-// 
-//  // Master
-//  masterFader = controlP5.addSlider("masterFader", 0, 1, 100, 740, 400, clipSize, 150);
-//  masterFader.setLabel("Master");
-//  masterFader.setValue(0.84);
-//  masterFader.setId(119);
-//  //masterFader.setLabelVisible(false);
-// 
-//  // Query names
-//  OscMessage myMessage = new OscMessage("/live/name/track");
-//  oscP5.send(myMessage, myRemoteLocation);
-//}
- 
- 
-//// Setup and draw Mutes
-//void setupMutes(int numTracks)
-//{
-//  myMutes = new Toggle[numTracks];
-//  for (int t = 0; t < numTracks; t++)
-//  {
-//    myMutes[t] = controlP5.addToggle("Mute"+t, false, spacingX*(t+1)-clipSize, 575, clipSize, clipSize);
-//    myMutes[t].setId(MIN_ID_MUTES + t);
-//    myMutes[t].align(ControlP5.CENTER,ControlP5.CENTER,ControlP5.CENTER,ControlP5.CENTER);
-//  }
-//}
- 
-//// Setup and draw Transport
-//void setupTransport()
-//{
-//  play = controlP5.addBang("Play", 610, 575, clipSize*2, clipSize);
-//  play.setId(ID_PLAY);
-//  play.align(ControlP5.CENTER,ControlP5.CENTER,ControlP5.CENTER,ControlP5.CENTER);
-// 
-//  stop = controlP5.addBang("Stop", 610+clipSize+55, 575, clipSize*2, clipSize);
-//  stop.setId(ID_STOP);
-//  stop.align(ControlP5.CENTER,ControlP5.CENTER,ControlP5.CENTER,ControlP5.CENTER);
-//}
 
-// LiveOSC_Processing_controlEvent
-// October 2012
-//
-// Controller actions for ControlP5 objects
- 
- 
 void controlEvent(ControlEvent theEvent)
 {
   int id = theEvent.getController().getId();
@@ -362,71 +270,3 @@ void controlEvent(ControlEvent theEvent)
     myMessage.add(clipNum);
     oscP5.send(myMessage, myRemoteLocation);
   }
- 
-//  // Scenes
-//  if (id >= MIN_ID_SCENES && id <= MAX_ID_SCENES)
-//  {
-//    OscMessage myMessage = new OscMessage("/live/play/scene");
-//    myMessage.add(id - MIN_ID_SCENES);
-//    oscP5.send(myMessage, myRemoteLocation);
-//  }
-// 
-//  // Faders
-//  if (id >= MIN_ID_FADERS && id <= MAX_ID_FADERS)
-//  { 
-//    OscMessage myMessage = new OscMessage("/live/volume");
-//    myMessage.add(id - MIN_ID_FADERS);
-//    myMessage.add(theEvent.getController().getValue());
-//    oscP5.send(myMessage, myRemoteLocation);
-//  }
-// 
-//  // Master Fader
-//  if (id == ID_MASTER_FADER)
-//  {
-//    OscMessage myMessage = new OscMessage("/live/master/volume");
-//    myMessage.add(theEvent.getController().getValue());
-//    oscP5.send(myMessage, myRemoteLocation);
-//  }
-// 
-//  // Stops
-//  if (id >= MIN_ID_STOPS && id <= MAX_ID_STOPS)
-//  {
-//    OscMessage myMessage = new OscMessage("/live/stop/track");
-//    myMessage.add(id - MIN_ID_STOPS);
-//    oscP5.send(myMessage, myRemoteLocation);
-//  }
-// 
-//  // Stop All
-//  if (id == ID_STOP_ALL)
-//  {
-//    for (int t = 0; t < NUM_TRACKS; t++)
-//    {
-//      OscMessage myMessage = new OscMessage("/live/stop/track");
-//      myMessage.add(t);
-//      oscP5.send(myMessage, myRemoteLocation);
-//    }
-//  }
-// 
-//  // Mutes
-//  if (id >= MIN_ID_MUTES && id <= MAX_ID_MUTES)
-//  {
-//    OscMessage myMessage = new OscMessage("/live/mute");
-//    myMessage.add(id - MIN_ID_MUTES);
-//    myMessage.add(theEvent.getController().getValue());
-//    oscP5.send(myMessage, myRemoteLocation);
-//  }
-// 
-//  // Play
-//  if (id == ID_PLAY)
-//  {
-//    OscMessage myMessage = new OscMessage("/live/play");
-//    oscP5.send(myMessage, myRemoteLocation);
-//  }
-// 
-//  // Stop
-//  if (id == ID_STOP)
-//  {
-//    OscMessage myMessage = new OscMessage("/live/stop");
-//    oscP5.send(myMessage, myRemoteLocation);
-//  }
-}

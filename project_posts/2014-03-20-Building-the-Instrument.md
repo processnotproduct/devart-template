@@ -30,3 +30,5 @@ Here you can see a foam tape that I used to further contain and cushion the sphe
 
 This is what the front looks like lit up! We think it would be awesome to be immersed in the space with only the light from these types of displays and the spheres shinning in the darkness.
 ![Example Image](../project_images/013DevArt.jpg?raw=true "Drawing!")
+
+Again these are only initial design with the actual installation have curved surfaces and spheres in multiple locations.

@@ -3,10 +3,14 @@ Play differently ...
 
 ## Authors
 - Tyson Kemp https://github.com/processnotproduct
-- Trevor Kemp 
+- Trevor Kemp https://github.com/thkemp
 
 ## Description
-We want to create an instrument that feels different and is closely linked to the visualization that would be created from that music. By using the air pressure of a rubber ball to actuate and effect the sound the player would feel a different type of connection to their musical expression.
+We are creating an instrument that feels different and is closely linked to the visualization that would be created from that music. By using the air pressure of a rubber ball to actuate and effect the sound the player would feel a different type of connection to their musical expression.
+
+The air pressure changes first trigger the sound then the manipulate the sound either by changing the volume, pitch, repeat, or many other variables of the sound.
+
+
 
 ## Link to Prototype
 Coming soon ...
@@ -17,16 +21,25 @@ Coming soon ...
 ## Example Code
 Imma firin' muh snares!
 ```
-if (analogvalue<threshlo &&  tripval2==1) {
-    snare.trigger();
-  
-      for (int i =0; i<=50; i++){
-       arduino.analogWrite(9,255);
-      }
-  }
+  if (analogvalue0>threshold0  ) {
+    //send flipping signal via OSC
+    OscMessage myMessage = new OscMessage("/arduino1_0");
+    myMessage.add(0);
+    oscP5.send(myMessage, myRemoteLocation);
+    myMessage = new OscMessage("/arduino1_0");
+    myMessage.add(1);
+    oscP5.send(myMessage, myRemoteLocation);
+    
+  } 
 ```
 ## Links to External Libraries
-Coming soon ...
+oscP5, netP5, controlP5 - http://www.sojamo.de/libraries/oscP5/
+
+Arduino - http://www.arduino.cc/
+
+OSCulator - http://www.osculator.net/
+
+Ableton Live - https://www.ableton.com/
 <!-- NOTE: You can also use this space to link to external libraries or Github repositories you used on your project.
 
 [Example Link](http://www.google.com "Example Link")

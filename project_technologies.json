@@ -4,14 +4,17 @@
             "WebAudio API"
         ],
         "platforms": [
-            "Chrome Apps"
+            "Chrome Apps",
+            "Arduino"
         ],
         "toolkits": [
-            "Processing.js"
+            "Processing.js",
+            "OSCulator"
         ]
     },
     "themes": [
         "Music",
+        "Air Pressure",
         "Instrument",
         "Graphics",
         "Projections"

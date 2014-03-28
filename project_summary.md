@@ -12,7 +12,9 @@ The air pressure changes first trigger the sound then the manipulate the sound e
 
 
 ## Link to Prototype
-In this current iteration we don't have all the parts connected like we want to, including the Google services and products parts. This version of the project was to test to idea of the physical instrument and the beginnings of the controls and code that go behind the curtain.
+In this current iteration we don't have all the parts connected like we want to, including the Google services and products parts. This version of the project was to test to idea of the physical instrument and the beginnings of the controls and code that go behind the curtain. 
+
+We eventually will package this into a Chrome Packaged App, for on the spot changing of sounds we have thought about using a Chromebook Pixel in kiosk mode with a sleek way to map new sounds to the different spheres.
 
 We don't really have a live prototype because of the physical nature of the concept. Part of the visualization system will be based on GPU shaders using processing to send the midi data to something like three.js.
 

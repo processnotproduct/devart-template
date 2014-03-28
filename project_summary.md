@@ -12,6 +12,8 @@ The air pressure changes first trigger the sound then the manipulate the sound e
 
 
 ## Link to Prototype
+In this current iteration we don't have all the parts connected like we want to, including the Google services and products parts. This version of the project was to test to idea of the physical instrument and the beginnings of the controls and code that go behind the curtain.
+
 We don't really have a live prototype because of the physical nature of the concept. Part of the visualization system will be based on GPU shaders using processing to send the midi data to something like three.js.
 
 This is one shader we really really like!!!
@@ -49,7 +51,7 @@ Ableton Live - https://www.ableton.com/
 [Example Link](http://www.google.com "Example Link")
 -->
 ## Images & Videos
-Coming soon ...
+
 <!--NOTE: For additional images you can either use a relative link to an image on this repo or an absolute link to an externally hosted image.
 
 ![Example Image](project_images/cover.jpg?raw=true "Example Image")

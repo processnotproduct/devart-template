@@ -1,5 +1,7 @@
 Always read the data sheets carefully is the lesson we learned here!
 
+![Example Image](../project_images/air-pressure-sensor.jpg?raw=true "Thing1")
+
 We seem to have ordered sensors that don't output in full range. We are putting 5V in but only getting mV readings out.
 
 The Arduinos analog to digital inputs and convert only have a certain resolution(0-1023) is what we have found out. We have tried to use AREF to rescale the inputs, we have also tried to use analogReadResolution(), but can't seem to get any resolution that works.

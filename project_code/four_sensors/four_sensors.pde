@@ -41,8 +41,8 @@ import cc.arduino.*;
 
 //for audio=====================
 
-import ddf.minim.*;
-import ddf.minim.ugens.*;
+//import ddf.minim.*;
+//import ddf.minim.ugens.*;
 
 // Declarations
 OscP5 oscP5;
@@ -52,10 +52,10 @@ NetAddress myRemoteLocation;
 Arduino arduino1;
 Arduino arduino2;
 
-Minim minim;
-AudioOutput out;
-AudioSample kick;
-AudioSample snare;
+//Minim minim;
+//AudioOutput out;
+//AudioSample kick;
+//AudioSample snare;
 
 //// to make an Instrument we must define a class
 //// that implements the Instrument interface.
@@ -103,25 +103,44 @@ float analogvalue1 = 0;
 float analogvalue2 = 0;
 float analogvalue3 = 0;
 float analogvalue4 = 0;
+float analogvalue5 = 0;
+//for 2nd arduino
+float analogvalue20 = 0;
+float analogvalue21 = 0;
+float analogvalue22 = 0;
+float analogvalue23 = 0;
 
-float freq=100;
-float duration=0.1;
-float threshold0=1000;
-float threshold1=1001;
-float threshold2=1001;
-float threshold3=1001;
-float threshold4=700;
+//input nominal values for the thresholds
+float threshold0=218;
+float threshold1=999;
+float threshold2=995;
+float threshold3=174;
+float threshold4=140;
+float threshold5=260;
 
-int trip0=0;
-int trip1=0;
-int trip4=0;
+float threshold20=1009;
+float threshold21=1017;
+float threshold22=1017;
+float threshold23=1013;
 
+
+float sliderTicks0 = 900;
+float sliderTicks1 = 900;
+float sliderTicks2 = 900;
+float sliderTicks3 = 900;
+float sliderTicks4 = 900;
+float sliderTicks5 = 900;
+
+float sliderTicks20 = 900;
+float sliderTicks21 = 900;
+float sliderTicks22 = 900;
+float sliderTicks23 = 900;
 
 
 void setup() {
   
 // make frame for the program
-  size(800, 500);
+  size(800, 800);
   frameRate(25);
 
 //  // Prints out the available serial ports.
@@ -135,18 +154,14 @@ void setup() {
   arduino1 = new Arduino(this, "/dev/tty.usbmodem621", 57600);
   
 ////front USB port on macbook pro
-//  arduino2 = new Arduino(this, "/dev/tty.usbmodem411", 57600);  
+  arduino2 = new Arduino(this, "/dev/tty.usbmodem411", 57600);  
   
-  
+
   
   // Alternatively, use the name of the serial port corresponding to your
   // Arduino (in double-quotes), as in the following line.
   //arduino = new Arduino(this, "/dev/tty.usbmodem621", 57600);
   
-//  // Set the Arduino digital pins as inputs.
-//  for (int i = 0; i <= 13; i++)
-//    arduino1.pinMode(i, Arduino.INPUT);
-//   // arduino2.pinMode(i, Arduino.INPUT);
 
 
   // Setup OSC
@@ -156,32 +171,79 @@ void setup() {
   // Setup ControlP5
   controlP5 = new ControlP5(this);
 
-  
-  
-  
+      // add a vertical sliders
+  controlP5.addSlider("sliderTicks0")
+     .setPosition(50,140)
+     .setSize(20,100)
+     .setRange(210,220)
+     .setValue(threshold0)
+     ;
+
+  controlP5.addSlider("sliderTicks1")
+     .setPosition(150,140)
+     .setSize(20,100)
+     .setRange(985,1020)
+     .setValue(threshold1)
+     ;
+     controlP5.addSlider("sliderTicks2")
+     .setPosition(250,140)
+     .setSize(20,100)
+     .setRange(985,1015)
+     .setValue(threshold2)
+     ;
+   
+     controlP5.addSlider("sliderTicks3")
+     .setPosition(350,140)
+     .setSize(20,100)
+     .setRange(150,250)
+     .setValue(threshold3)
+     ;
+   
+     controlP5.addSlider("sliderTicks4")
+     .setPosition(450,140)
+     .setSize(20,100)
+     .setRange(100,200)
+     .setValue(threshold4)
+     ;  
+
+     controlP5.addSlider("sliderTicks5")
+     .setPosition(550,140)
+     .setSize(20,100)
+     .setRange(200,300)
+     .setValue(threshold5)
+     ; 
+
+     controlP5.addSlider("sliderTicks20")
+     .setPosition(50,300)
+     .setSize(20,100)
+     .setRange(990,1025)
+     .setValue(threshold20)
+     ;  
+    
+         controlP5.addSlider("sliderTicks21")
+     .setPosition(150,300)
+     .setSize(20,100)
+     .setRange(995,1025)
+     .setValue(threshold21)
+     ;
+    
+         controlP5.addSlider("sliderTicks22")
+     .setPosition(250,300)
+     .setSize(20,100)
+     .setRange(995,1025)
+     .setValue(threshold22)
+     ;
+    
+         controlP5.addSlider("sliderTicks23")
+     .setPosition(350,300)
+     .setSize(20,100)
+     .setRange(995,1025)
+     .setValue(threshold23)
+     ; 
   
 // ***MAKE SURE TO LOAD MODIFIED STANDARDFIRMATA, THAT HAS analogReference(INTERNAL); IN THE LOOP() SO THAT VOLTAGES WILL BE CORRECT
  
- 
- 
- 
 
-
-//for audio:
-      minim = new Minim(this);
-  
-// use the getLineOut method of the Minim object to get an AudioOutput object
-  out = minim.getLineOut();
-    
-// load BD.wav from the data folder
-  kick = minim.loadSample( "BD.mp3", 512 );
-    
-// load SD.wav from the data folder
-  snare = minim.loadSample("SD.wav", 512);
-
-
-
-oscP5.plug(this,"incomingHandlerPlay","/live/play");
 
 }
 
@@ -191,42 +253,109 @@ void draw() {
     stroke(on);
     fill(255, 255, 255);
   
+int scalefactor1=10;
+float offset1=990;
+  
 //read in analog values from first arduino (rear port)
   analogvalue0=arduino1.analogRead(0);//channel is 0
   analogvalue1=arduino1.analogRead(1);//channel is 1
   analogvalue2=arduino1.analogRead(2);//channel is 2
   analogvalue3=arduino1.analogRead(3);//channel is 3
-    analogvalue4=arduino1.analogRead(4);//channel is 4
+  analogvalue4=arduino1.analogRead(4);//channel is 4
+  analogvalue5=arduino1.analogRead(5);//channel is 5
+    
+//read in values from second arduino (front port)
+    analogvalue20=arduino2.analogRead(0);//channel is 0
+    analogvalue21=arduino2.analogRead(1);//channel is 1
+    analogvalue22=arduino2.analogRead(2);//channel is 2
+    analogvalue23=arduino2.analogRead(3);//channel is 3  
+  
+float scaledval0=scalefactor1*(analogvalue0-offset1);
+float scaledval1=scalefactor1*(analogvalue1-offset1);
+float scaledval2=scalefactor1*(analogvalue2-offset1);
+float scaledval3=2*(analogvalue3-100);
+//float scaledval3=0.3*(analogvalue3-500);
+float scaledval4=2*(analogvalue4-100);
+float scaledval5=scalefactor1*(analogvalue5-offset1);
+  
+float scaledval20=scalefactor1*(analogvalue20-offset1);
+float scaledval21=scalefactor1*(analogvalue21-offset1);
+float scaledval22=scalefactor1*(analogvalue22-offset1);
+float scaledval23=scalefactor1*(analogvalue23-offset1);
+  
   
 //  analogvalue2=arduino2.analogRead(0);//channel is 0
 
 
-//display values (value, x, y)
-  text(analogvalue0,100,100);
-  text(analogvalue1,200,100);
-  text(analogvalue2,300,100);
-  text(analogvalue3,400,100);
-    text(analogvalue4,500,100);
-  //display time (milliseconds)
-text(millis(),400,200);
 
-//draw bars indicating values (x,y,w,h,radius)
+  
+    
+  //display time (milliseconds)
+text(millis(),20,20);
+
+//draw bars indicating values (x from left,y from top,w,h,radius)
   fill(off);
 
-  rect(100, 150, 20, 5*(analogvalue0-990), 5);
-  rect(200, 150, 20, 5*(analogvalue1-990), 5);
-  rect(300, 150, 20, 5*(analogvalue2-990), 5);
-  rect(400, 150, 20, 5*(analogvalue3-990), 5);
-  rect(500, 150, 20, 0.5*(analogvalue4-500), 5);
+  rect(100, 150, 20, scaledval0, 5);
+  rect(200, 150, 20, scaledval1, 5);
+  rect(300, 150, 20, scaledval2, 5);
+  rect(400, 150, 20, scaledval3, 5);
+  rect(500, 150, 20, scaledval4, 5);
+  rect(600, 150, 20, scaledval5, 5);
+  
+  
+  rect(100, 350, 20, scaledval20, 5);
+  rect(200, 350, 20, scaledval21, 5);
+  rect(300, 350, 20, scaledval22, 5);
+  rect(400, 350, 20, scaledval23, 5);
 //  
+fill(255, 255, 255);
+
+  float ypos1=100;
+
+//display values (value, x, y)
+  text(analogvalue0,110,ypos1);
+  text(analogvalue1,210,ypos1);
+  text(analogvalue2,310,ypos1);
+  text(analogvalue3,410,ypos1);
+  text(analogvalue4,510,ypos1);
+  text(analogvalue5,610,ypos1);
+    
+    float ypos2=300;
+    //for second arduino
+  text(analogvalue20,100,ypos2);
+  text(analogvalue21,200,ypos2);
+  text(analogvalue22,300,ypos2);
+  text(analogvalue23,400,ypos2);
+  
+  
+//reset threshold values with sliders
+threshold0=sliderTicks0;
+threshold1=sliderTicks1;
+threshold2=sliderTicks2;
+threshold3=sliderTicks3;
+threshold4=sliderTicks4;
+threshold5=sliderTicks5;
+
+threshold20=sliderTicks20;
+threshold21=sliderTicks21;
+threshold22=sliderTicks22;
+threshold23=sliderTicks23;
+
+
   //indicators of threshold value(s)
   stroke(255);
-  line(100,150+5*(threshold0-990),150,150+5*(threshold0-990));
-line(200,150+5*(threshold1-990),250,150+5*(threshold1-990));
-line(300,150+5*(threshold2-990),350,150+5*(threshold2-990));
-line(400,150+5*(threshold3-990),450,150+5*(threshold3-990));
-line(500,150+0.5*(threshold4-500),550,150+0.5*(threshold4-500));
-  
+line(100,150+scalefactor1*(threshold0-990),150,150+scalefactor1*(threshold0-990));
+line(200,150+scalefactor1*(threshold1-990),250,150+scalefactor1*(threshold1-990));
+line(300,150+scalefactor1*(threshold2-990),350,150+scalefactor1*(threshold2-990));
+line(400,150+0.3*(threshold3-500),450,150+0.3*(threshold3-500));
+line(500,150+0.3*(threshold4-500),550,150+0.3*(threshold4-500));
+line(600,150+scalefactor1*(threshold5-990),650,150+scalefactor1*(threshold5-990));
+
+line(100,300+scalefactor1*(threshold20-990),150,300+scalefactor1*(threshold20-990));
+line(200,300+scalefactor1*(threshold21-990),250,300+scalefactor1*(threshold21-990));
+line(300,300+scalefactor1*(threshold22-990),350,300+scalefactor1*(threshold22-990));
+line(400,300+scalefactor1*(threshold23-990),450,300+scalefactor1*(threshold23-990));
 
 
 //sensor 0 action
@@ -238,8 +367,40 @@ line(500,150+0.5*(threshold4-500),550,150+0.5*(threshold4-500));
     myMessage = new OscMessage("/arduino1_0");
     myMessage.add(1);
     oscP5.send(myMessage, myRemoteLocation);
-    
   }    
+  
+  //sensor 1 action
+  if (analogvalue1>threshold1  ) {
+    //send flipping signal via OSC
+    OscMessage myMessage = new OscMessage("/arduino1_1");
+    myMessage.add(0);
+    oscP5.send(myMessage, myRemoteLocation);
+    myMessage = new OscMessage("/arduino1_1");
+    myMessage.add(1);
+    oscP5.send(myMessage, myRemoteLocation);
+  }  
+  
+  //sensor 2 action
+  if (analogvalue2>threshold2  ) {
+    //send flipping signal via OSC
+    OscMessage myMessage = new OscMessage("/arduino1_2");
+    myMessage.add(0);
+    oscP5.send(myMessage, myRemoteLocation);
+    myMessage = new OscMessage("/arduino1_2");
+    myMessage.add(1);
+    oscP5.send(myMessage, myRemoteLocation);
+  }  
+  
+  //sensor 3 action
+  if (analogvalue3>threshold3  ) {
+    //send flipping signal via OSC
+    OscMessage myMessage = new OscMessage("/arduino1_3");
+    myMessage.add(0);
+    oscP5.send(myMessage, myRemoteLocation);
+    myMessage = new OscMessage("/arduino1_3");
+    myMessage.add(1);
+    oscP5.send(myMessage, myRemoteLocation);
+  }  
 
 //sensor 4 action
   if (analogvalue4>threshold4  ) {
@@ -250,12 +411,67 @@ line(500,150+0.5*(threshold4-500),550,150+0.5*(threshold4-500));
     myMessage = new OscMessage("/arduino1_4");
     myMessage.add(1);
     oscP5.send(myMessage, myRemoteLocation);
-     
-     
-      OscMessage myMessage2 = new OscMessage("/live/play");
-    oscP5.send(myMessage2, myRemoteLocation);
-    
-    
+  }
+  
+//sensor 5 action
+  if (analogvalue5>threshold5  ) {
+    //send flipping signal via OSC
+    OscMessage myMessage = new OscMessage("/arduino1_5");
+    myMessage.add(0);
+    oscP5.send(myMessage, myRemoteLocation);
+    myMessage = new OscMessage("/arduino1_5");
+    myMessage.add(1);
+    oscP5.send(myMessage, myRemoteLocation);
+  }  
+  
+  
+  //sensor 2,0 action
+  if (analogvalue20>threshold20  ) {
+    //send flipping signal via OSC
+    OscMessage myMessage = new OscMessage("/arduino2_0");
+    myMessage.add(0);
+    oscP5.send(myMessage, myRemoteLocation);
+    myMessage = new OscMessage("/arduino2_0");
+    myMessage.add(1);
+    oscP5.send(myMessage, myRemoteLocation);
+  }  
+  
+    //sensor 2,1 action
+  if (analogvalue21>threshold21  ) {
+    //send flipping signal via OSC
+    OscMessage myMessage = new OscMessage("/arduino2_1");
+    myMessage.add(0);
+    oscP5.send(myMessage, myRemoteLocation);
+    myMessage = new OscMessage("/arduino2_1");
+    myMessage.add(1);
+    oscP5.send(myMessage, myRemoteLocation);
+  }  
+    //sensor 2,2 action
+  if (analogvalue22>threshold22  ) {
+    //send flipping signal via OSC
+    OscMessage myMessage = new OscMessage("/arduino2_2");
+    myMessage.add(0);
+    oscP5.send(myMessage, myRemoteLocation);
+    myMessage = new OscMessage("/arduino2_2");
+    myMessage.add(1);
+    oscP5.send(myMessage, myRemoteLocation);
+  }  
+    //sensor 2,3 action
+  if (analogvalue23>threshold23  ) {
+    //send flipping signal via OSC
+    OscMessage myMessage = new OscMessage("/arduino2_3");
+    myMessage.add(0);
+    oscP5.send(myMessage, myRemoteLocation);
+    myMessage = new OscMessage("/arduino2_3");
+    myMessage.add(1);
+    oscP5.send(myMessage, myRemoteLocation);
+  }  
+
+//      OscMessage myMessage2 = new OscMessage("/live/play");
+//    oscP5.send(myMessage2, myRemoteLocation);
+
+
+
 //    int trackNum = 0;
 //    int clipNum = 0;
 //     
@@ -275,15 +491,6 @@ line(500,150+0.5*(threshold4-500),550,150+0.5*(threshold4-500));
 //    myMessage.add(trackNum);
 //    myMessage.add(clipNum);
 //    oscP5.send(myMessage, myRemoteLocation);
-    
-    
-  }
-  
-  
-
-
-
-
 
 
 
